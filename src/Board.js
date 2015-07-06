@@ -128,8 +128,8 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-
-
+      // didn't need this helper function
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -148,18 +148,18 @@
 
       // appends major diagonals from c = 0 to c = n-1
       for(var x = 0; x < matrixLength; x++){
-        line = [];
+        line = [0]; // prepopulating array, so we don't work with empty arrays
         for (r = 0, c = x; c < matrixLength - x; r++, c++){
           line.push(matrix[r][c]);
         };
-        
+
         if (check(line)) { 
           return true; 
         }
       }
       // appends major diagonals from r = 1 to r = n-1
       for(var y = 1; y < matrixLength; y++){
-        line = [];
+        line = [0]; // prepopulating array, so we don't work with empty arrays
         for (r = y, c = 0; r < matrixLength - y; r++, c++){
           line.push(matrix[r][c]);
         };
@@ -182,12 +182,48 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      // didn't need this helper function
+      return false; 
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var matrix = this.rows();
+      var matrixLength = this.get('n');
+      var line = [];
+      var r, c;
+
+      var check = function(line) {
+        return _(line).reduce(function(a, b){ 
+          return a + b; 
+        }) > 1; 
+      };
+
+      // appends major diagonals from c = 0 to c = n-1
+      for(var x = matrixLength - 1; x > 0; x--){
+        line = [0]; // prepopulating array, so we don't work with empty arrays
+        for (r = 0, c = x; c >= 0; r++, c--){
+          line.push(matrix[r][c]);
+        };
+        if (check(line)) { 
+          return true; 
+        }
+      }
+      // appends major diagonals from r = 1 to r = n-1
+      for(var y = 1; y < matrixLength; y++){
+        line = [0]; // prepopulating array, so we don't work with empty arrays
+        for (r = y, c = matrixLength - 1; r < matrixLength; r++, c--){
+          line.push(matrix[r][c]);
+        };
+       
+        if (check(line)) { 
+          return true; 
+        }
+      }
+
+      
+
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
