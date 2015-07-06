@@ -79,8 +79,9 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return _.some(this.get(rowIndex));
-     
+      return this.get(rowIndex).reduce(function(a, b){
+        return a + b;
+      }) > 1;
     },
 
     // test if any rows on this board contain conflicts
@@ -99,13 +100,13 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      var results = [];
+      var sum = 0;
 
       for(var i = 0; i < this.rows().length; i++){
-        results.push(this.get(i)[colIndex]);
+        sum += this.get(i)[colIndex];
       }
-
-      return _.some(results);
+      
+      return sum > 1 ;
     },
 
     // test if any columns on this board contain conflicts
@@ -127,12 +128,51 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+
+
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var matrix = this.rows();
+      var matrixLength = this.get('n');
+      var line = [];
+      var r, c;
+
+      var check = function(line) {
+        console.log(line);
+        return _(line).reduce(function(a, b){ 
+          return a + b; 
+        }) > 1; 
+      };
+
+      // appends major diagonals from c = 0 to c = n-1
+      for(var x = 0; x < matrixLength; x++){
+        line = [];
+        for (r = 0, c = x; c < matrixLength - x; r++, c++){
+          line.push(matrix[r][c]);
+        };
+        
+        if (check(line)) { 
+          return true; 
+        }
+      }
+      // appends major diagonals from r = 1 to r = n-1
+      for(var y = 1; y < matrixLength; y++){
+        line = [];
+        for (r = y, c = 0; r < matrixLength - y; r++, c++){
+          line.push(matrix[r][c]);
+        };
+       
+        if (check(line)) { 
+          return true; 
+        }
+      }
+
+      
+
+      return false;
+      
     },
 
 
