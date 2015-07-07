@@ -14,33 +14,33 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, 
 // with n rooks placed such that none of them can attack each other
 
-window.findNRooksSolution = function(n) {
-  var solutions = [];
-  var input = _.range(n);
+var solutions = [];
 
-  var generatePerm = function(columnOptions, givenPath){
-    var current;
-    var newPath;
-    var givenPath = givenPath || [];
+var generatePerm = function(columnOptions, givenPath){
+  var current;
+  var newPath;
+  var givenPath = givenPath || [];
 
-    for(var i = 0; i < columnOptions.length; i++){
-      // removing ith column from columnOptions, and mutates columnOptions
-      current = columnOptions.splice(i, 1)[0];
-      newPath = givenPath.concat(current);
+  for(var i = 0; i < columnOptions.length; i++){
+    // removing ith column from columnOptions, and mutates columnOptions
+    current = columnOptions.splice(i, 1)[0];
+    newPath = givenPath.concat(current);
 
-      // checks if columnOptions array is empty
-      if(columnOptions.length === 0){
-        solutions.push(newPath);
-      }
-
-      // recurse with a COPY of the columnOptions and the newPath as the givenPath
-      generatePerm(columnOptions.slice(), newPath);
-      // reinsert into the columnOptions array
-      columnOptions.splice(i, 0, current);
+    // checks if columnOptions array is empty
+    if(columnOptions.length === 0){
+      solutions.push(newPath);
     }
-  };
 
-  generatePerm(input);
+    // recurse with a COPY of the columnOptions and the newPath as the givenPath
+    generatePerm(columnOptions.slice(), newPath);
+    // reinsert into the columnOptions array
+    columnOptions.splice(i, 0, current);
+  }
+};
+
+window.findNRooksSolution = function(n) {
+  solutions = [];
+  generatePerm(_.range(n));
 
   var result = _(solutions[0]).map(function(item){
     var outArr = [];
@@ -64,7 +64,9 @@ window.findNRooksSolution = function(n) {
 // return the number of nxn chessboards that exist, with n rooks placed 
 // such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  solutions = [];
+  generatePerm(_.range(n));
+  var solutionCount = solutions.length;
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
