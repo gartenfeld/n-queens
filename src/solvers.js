@@ -76,21 +76,13 @@ window.countNRooksSolutions = function(n) {
   return solutionCount;
 };
 
-
-
-// return a matrix (an array of arrays) representing a single nxn chessboard, 
-// with n queens placed such that none of them can attack each other
-window.findNQueensSolution = function(n) {
-  solutions = [];
-  generatePerm(_.range(n));
+var queensHelper = function(){
 
   var queenSolutions = [];
   var candidate;
   var column; 
   var majorConflict = false,
       minorConflict = false;
-
-  console.log('HEADS UP!!!!');
 
   for(var i = 0; i < solutions.length; i++){
     candidate = solutions[i];
@@ -123,6 +115,22 @@ window.findNQueensSolution = function(n) {
 
   }
 
+  return queenSolutions;
+};
+
+// return a matrix (an array of arrays) representing a single nxn chessboard, 
+// with n queens placed such that none of them can attack each other
+window.findNQueensSolution = function(n) {
+  if (n === 2) {
+    return [[0, 0],[0, 0]];
+  };
+  if (n === 3) {
+    return [[0,0,0],[0,0,0],[0,0,0]];
+  }
+  solutions = [];
+  generatePerm(_.range(n));
+  var queenSolutions = queensHelper();
+
   var result = numToBinaryMatrix(queenSolutions[0], n);
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(result));
@@ -133,7 +141,16 @@ window.findNQueensSolution = function(n) {
 // return the number of nxn chessboards that exist, with n queens placed 
 // such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0; 
+  if (n === 0 || n === 1) {
+    solutionCount = 1;
+  } else if(n === 2 || n === 3){
+    solutionCount = 0;
+  } else {
+    solutions = [];
+    generatePerm(_.range(n));
+    solutionCount = queensHelper().length;
+  }
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
