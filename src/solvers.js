@@ -15,8 +15,52 @@
 // with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution, newMatrix;
+  var rookCounter = 0;
 
+
+  var matrix = new Board({n:n});
+
+
+  var placeRook = function(matrix) {
+    var row;
+    // place at next available spot
+    for(var i = 0; i < n; i++){
+      for(var j = 0; j < n; j++){
+        // if all allotted rooks have been placed
+        
+        // if the cell is empty
+        if(matrix.get(i)[j] === 0){
+          
+          
+          // newMatrix = new Board(matrix.rows()); // copy the matrix
+          // row = newMatrix.get(i); 
+          // row[j] = 1;
+          // newMatrix.set(i, row); // place a rook there
+          // if the newly placed rook does not have conflicts'
+
+          console.log(newMatrix);
+
+          if(!newMatrix.hasAnyRooksConflicts()){
+            // add another possible rook to the board
+            rookCounter++;
+            if(rookCounter === n){
+              return newMatrix;
+            } else {
+
+              // console.log(JSON.stringify(newMatrix.rows()));
+              return placeRook(newMatrix);
+            }
+            
+            
+          }
+        }
+      }
+    }
+
+  };
+
+  solution = placeRook(matrix);
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
