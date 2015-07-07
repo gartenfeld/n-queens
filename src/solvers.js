@@ -15,54 +15,48 @@
 // with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-  var solution, newMatrix;
-  var rookCounter = 0;
+  var solutions = [];
+  var input = _.range(n);
 
+  var generatePerm = function(columnOptions, givenPath){
+    var current;
+    var newPath;
+    var givenPath = givenPath || [];
 
-  var matrix = new Board({n:n});
+    for(var i = 0; i < columnOptions.length; i++){
+      // removing ith column from columnOptions, and mutates columnOptions
+      current = columnOptions.splice(i, 1)[0];
+      newPath = givenPath.concat(current);
 
-
-  var placeRook = function(matrix) {
-    var row;
-    // place at next available spot
-    for(var i = 0; i < n; i++){
-      for(var j = 0; j < n; j++){
-        // if all allotted rooks have been placed
-        
-        // if the cell is empty
-        if(matrix.get(i)[j] === 0){
-          
-          
-          // newMatrix = new Board(matrix.rows()); // copy the matrix
-          // row = newMatrix.get(i); 
-          // row[j] = 1;
-          // newMatrix.set(i, row); // place a rook there
-          // if the newly placed rook does not have conflicts'
-
-          console.log(newMatrix);
-
-          if(!newMatrix.hasAnyRooksConflicts()){
-            // add another possible rook to the board
-            rookCounter++;
-            if(rookCounter === n){
-              return newMatrix;
-            } else {
-
-              // console.log(JSON.stringify(newMatrix.rows()));
-              return placeRook(newMatrix);
-            }
-            
-            
-          }
-        }
+      // checks if columnOptions array is empty
+      if(columnOptions.length === 0){
+        solutions.push(newPath);
       }
-    }
 
+      // recurse with a COPY of the columnOptions and the newPath as the givenPath
+      generatePerm(columnOptions.slice(), newPath);
+      // reinsert into the columnOptions array
+      columnOptions.splice(i, 0, current);
+    }
   };
 
-  solution = placeRook(matrix);
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  generatePerm(input);
+
+  var result = _(solutions[0]).map(function(item){
+    var outArr = [];
+    for (var i = 0; i < n; i++) {
+      if (i === item) {
+        outArr.push(1);
+      } else {
+        outArr.push(0);
+      };      
+    }
+    return outArr;
+  });
+
+  //solution = placeRook(matrix);
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(result));
+  return result;
 };
 
 
