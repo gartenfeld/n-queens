@@ -84,42 +84,44 @@ window.findNQueensSolution = function(n) {
   solutions = [];
   generatePerm(_.range(n));
 
-  console.log(JSON.stringify(solutions));
-
   var queenSolutions = [];
   var candidate;
   var column; 
   var majorConflict = false,
       minorConflict = false;
 
-  for(var i = 0; i < solutions.length; i++){
+  console.log('HEADS UP!!!!');
 
+  for(var i = 0; i < solutions.length; i++){
     candidate = solutions[i];
+    minorConflict = false;
+    majorConflict = false;
 
     for(var j = 0; j < candidate.length; j++){
       column = candidate[j];
+      // console.log(column);
 
       // check minor
       for (var minor = 0; minor < candidate.length; minor++) {
-        if ((column + j === candidate[minor] + minor) && j !== minor) {
+        if ((j !== minor) && (column + j === candidate[minor] + minor)) {
           minorConflict = true;
+          // console.log('checking ' + j + ', ' + column + ' against ' + minor + ', ' + candidate[minor] + ' => conflict');
+
         }
       };
       // checking major
       for (var major = 0; major < candidate.length; major++) {
-        if ((column - j === candidate[major] - major) && j !== major) {
+        if ((j !== major) && (column - j === candidate[major] - major)) {
           majorConflict = true;
         }
       };
-      
-      if (!minorConflict && !majorConflict) {
-        queenSolutions.push(candidate);
-      };
     }
+
+    if (!minorConflict && !majorConflict) {
+        queenSolutions.push(candidate);
+    };
+
   }
-
-  console.log(JSON.stringify(queenSolutions));
-
 
   var result = numToBinaryMatrix(queenSolutions[0], n);
 
