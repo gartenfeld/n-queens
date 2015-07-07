@@ -38,21 +38,25 @@ var generatePerm = function(columnOptions, givenPath){
   }
 };
 
+var numToBinaryMatrix = function(array, n){
+  return _(array).map(function(item){
+    var lineArr = []
+    for (var i = 0; i < n; i++) {
+      if (i === item) {
+        lineArr.push(1);
+      } else {
+        lineArr.push(0);
+      };      
+    }
+    return lineArr;
+  });
+};
+
 window.findNRooksSolution = function(n) {
   solutions = [];
   generatePerm(_.range(n));
 
-  var result = _(solutions[0]).map(function(item){
-    var outArr = [];
-    for (var i = 0; i < n; i++) {
-      if (i === item) {
-        outArr.push(1);
-      } else {
-        outArr.push(0);
-      };      
-    }
-    return outArr;
-  });
+  var result = numToBinaryMatrix(solutions[0], n);
 
   //solution = placeRook(matrix);
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(result));
@@ -77,10 +81,50 @@ window.countNRooksSolutions = function(n) {
 // return a matrix (an array of arrays) representing a single nxn chessboard, 
 // with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  solutions = [];
+  generatePerm(_.range(n));
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  console.log(JSON.stringify(solutions));
+
+  var queenSolutions = [];
+  var candidate;
+  var column; 
+  var majorConflict = false,
+      minorConflict = false;
+
+  for(var i = 0; i < solutions.length; i++){
+
+    candidate = solutions[i];
+
+    for(var j = 0; j < candidate.length; j++){
+      column = candidate[j];
+
+      // check minor
+      for (var minor = 0; minor < candidate.length; minor++) {
+        if ((column + j === candidate[minor] + minor) && j !== minor) {
+          minorConflict = true;
+        }
+      };
+      // checking major
+      for (var major = 0; major < candidate.length; major++) {
+        if ((column - j === candidate[major] - major) && j !== major) {
+          majorConflict = true;
+        }
+      };
+      
+      if (!minorConflict && !majorConflict) {
+        queenSolutions.push(candidate);
+      };
+    }
+  }
+
+  console.log(JSON.stringify(queenSolutions));
+
+
+  var result = numToBinaryMatrix(queenSolutions[0], n);
+
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(result));
+  return result;
 };
 
 
