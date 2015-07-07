@@ -101,22 +101,17 @@
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
       var sum = 0;
-
       for(var i = 0; i < this.rows().length; i++){
         sum += this.get(i)[colIndex];
       }
-      
       return sum > 1 ;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
       for(var i = 0; i < this.get('n'); i++){
-        if(this.hasColConflictAt(i)){
-   
+        if(this.hasColConflictAt(i))  
           return true;
-
-        }
       } 
       return false;
     },
@@ -140,7 +135,6 @@
       var r, c;
 
       var check = function(line) {
-        console.log(line);
         return _(line).reduce(function(a, b){ 
           return a + b; 
         }) > 1; 
@@ -153,9 +147,8 @@
           line.push(matrix[r][c]);
         };
 
-        if (check(line)) { 
+        if (check(line))
           return true; 
-        }
       }
       // appends major diagonals from r = 1 to r = n-1
       for(var y = 1; y < matrixLength; y++){
@@ -164,15 +157,10 @@
           line.push(matrix[r][c]);
         };
        
-        if (check(line)) { 
+        if (check(line))
           return true; 
-        }
       }
-
-      
-
       return false;
-      
     },
 
 
@@ -199,30 +187,25 @@
         }) > 1; 
       };
 
-      // appends major diagonals from c = 0 to c = n-1
+      // appends minor diagonals from c = n-1 to c = 0
       for(var x = matrixLength - 1; x > 0; x--){
         line = [0]; // prepopulating array, so we don't work with empty arrays
         for (r = 0, c = x; c >= 0; r++, c--){
           line.push(matrix[r][c]);
         };
-        if (check(line)) { 
+        if (check(line)) 
           return true; 
-        }
       }
-      // appends major diagonals from r = 1 to r = n-1
+      // appends major diagonals from r = n-1 to r = 0
       for(var y = 1; y < matrixLength; y++){
         line = [0]; // prepopulating array, so we don't work with empty arrays
         for (r = y, c = matrixLength - 1; r < matrixLength; r++, c--){
           line.push(matrix[r][c]);
         };
        
-        if (check(line)) { 
+        if (check(line)) 
           return true; 
-        }
       }
-
-      
-
       return false;
     }
 
